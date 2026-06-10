@@ -1,1 +1,19 @@
+# 部署配置
 .vercel
+
+# 构建产物
+dist/
+
+# Cloudflare
+.wrangler/
+
+# 操作系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器
+.vscode/
+*.swp
+*.swo
+*~
