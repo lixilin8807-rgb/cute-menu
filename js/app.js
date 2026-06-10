@@ -85,9 +85,15 @@ const App = (function () {
       target.classList.remove('page-hidden');
     }
 
-    // 更新底部导航
+    // 更新底部导航（含 aria-current）
     document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.toggle('active', item.dataset.page === page);
+      const isActive = item.dataset.page === page;
+      item.classList.toggle('active', isActive);
+      if (isActive) {
+        item.setAttribute('aria-current', 'page');
+      } else {
+        item.removeAttribute('aria-current');
+      }
     });
 
     // 更新状态

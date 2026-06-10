@@ -10,7 +10,7 @@ const Utils = {
   getDeviceId() {
     let deviceId = localStorage.getItem('deviceId');
     if (!deviceId) {
-      deviceId = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 9);
+      deviceId = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 11);
       localStorage.setItem('deviceId', deviceId);
     }
     return deviceId;
