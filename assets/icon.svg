@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- 背景圆 -->
+  <circle cx="256" cy="256" r="250" fill="#FFF8E7" stroke="#F28C71" stroke-width="8"/>
+  <!-- 猫脸 -->
+  <ellipse cx="256" cy="280" rx="130" ry="110" fill="#F28C71"/>
+  <!-- 左耳 -->
+  <polygon points="140,190 120,80 200,150" fill="#F28C71"/>
+  <polygon points="148,178 135,100 190,155" fill="#FFB8A8"/>
+  <!-- 右耳 -->
+  <polygon points="372,190 392,80 312,150" fill="#F28C71"/>
+  <polygon points="364,178 377,100 322,155" fill="#FFB8A8"/>
+  <!-- 左眼 -->
+  <ellipse cx="210" cy="260" rx="22" ry="24" fill="#FFFFFF"/>
+  <ellipse cx="212" cy="262" rx="12" ry="14" fill="#4A3728"/>
+  <circle cx="218" cy="255" r="5" fill="#FFFFFF"/>
+  <!-- 右眼 -->
+  <ellipse cx="302" cy="260" rx="22" ry="24" fill="#FFFFFF"/>
+  <ellipse cx="304" cy="262" rx="12" ry="14" fill="#4A3728"/>
+  <circle cx="310" cy="255" r="5" fill="#FFFFFF"/>
+  <!-- 鼻子 -->
+  <ellipse cx="256" cy="295" rx="10" ry="7" fill="#FFB8A8"/>
+  <!-- 嘴巴 -->
+  <path d="M240,305 Q256,322 272,305" fill="none" stroke="#4A3728" stroke-width="3" stroke-linecap="round"/>
+  <line x1="256" y1="302" x2="256" y2="312" stroke="#4A3728" stroke-width="3" stroke-linecap="round"/>
+  <!-- 胡须 -->
+  <line x1="130" y1="275" x2="195" y2="285" stroke="#4A3728" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="130" y1="295" x2="195" y2="295" stroke="#4A3728" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="382" y1="275" x2="317" y2="285" stroke="#4A3728" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="382" y1="295" x2="317" y2="295" stroke="#4A3728" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- 猫爪印 -->
+  <circle cx="370" cy="390" r="16" fill="#F28C71" opacity="0.6"/>
+  <circle cx="355" cy="375" r="8" fill="#F28C71" opacity="0.6"/>
+  <circle cx="385" cy="375" r="8" fill="#F28C71" opacity="0.6"/>
+  <circle cx="355" cy="405" r="8" fill="#F28C71" opacity="0.6"/>
+  <circle cx="385" cy="405" r="8" fill="#F28C71" opacity="0.6"/>
+  <!-- 猫爪印小 -->
+  <circle cx="140" cy="400" r="10" fill="#F28C71" opacity="0.4"/>
+  <circle cx="130" cy="390" r="5" fill="#F28C71" opacity="0.4"/>
+  <circle cx="150" cy="390" r="5" fill="#F28C71" opacity="0.4"/>
+  <circle cx="130" cy="410" r="5" fill="#F28C71" opacity="0.4"/>
+  <circle cx="150" cy="410" r="5" fill="#F28C71" opacity="0.4"/>
+</svg>

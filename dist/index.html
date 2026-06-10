@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#FFF8F6">
+  <meta name="color-scheme" content="light only">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="趣味点菜">
+  <meta name="description" content="家庭趣味点菜 - 今天吃什么？">
+  <link rel="manifest" href="manifest.json">
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <title>🐱 趣味点菜</title>
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!--  应用容器                                                    -->
+  <!-- ============================================================ -->
+  <div id="app">
+
+    <!-- ========== 页面：首页 ========== -->
+    <div id="page-home" class="page">
+      <!-- 顶部标语 -->
+      <div class="home-tagline">人是铁，饭是钢，一顿不吃饿得慌~喵🐱</div>
+
+      <!-- 主行动区：今天吃什么 -->
+      <section class="hero-section">
+        <div class="hero-cat">
+          <img src="img/xiaomao.png" alt="小猫咪">
+        </div>
+        <button class="btn-hero" id="btn-what-to-eat">
+          <span class="btn-hero-text">今天吃什么</span>
+          <span class="btn-hero-paw"><img src="img/maozhua.png" alt="猫爪"></span>
+        </button>
+      </section>
+
+      <!-- 搜索区 -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input" placeholder="搜索菜名...">
+      </div>
+
+      <!-- 分类标签 -->
+      <div class="category-tabs" id="category-tabs">
+        <button class="category-tag active" data-category="全部">全部</button>
+        <button class="category-tag" data-category="荤菜">荤菜</button>
+        <button class="category-tag" data-category="素菜">素菜</button>
+        <button class="category-tag" data-category="汤品">汤品</button>
+        <button class="category-tag" data-category="主食">主食</button>
+      </div>
+
+      <!-- 猫咪推荐卡片 -->
+      <div class="recommend-card" id="recommend-card">
+        <div class="recommend-badge">🐱 猫咪推荐</div>
+        <div class="recommend-image" id="recommend-image">🍽️</div>
+        <h3 class="recommend-name" id="recommend-name">蛋炒饭</h3>
+        <span class="recommend-category tag-staple" id="recommend-category">主食</span>
+        <div class="recommend-actions">
+          <button class="btn-refresh" id="btn-refresh">🔄 换一个</button>
+          <button class="btn-confirm" id="btn-confirm">就它了！</button>
+        </div>
+      </div>
+
+      <!-- 快捷入口 -->
+      <div class="quick-entries">
+        <div class="quick-card" data-page="menu">
+          <span class="quick-icon">📋</span>
+          <span class="quick-label">今日菜单</span>
+        </div>
+        <div class="quick-card" data-page="fridge">
+          <span class="quick-icon">🧊</span>
+          <span class="quick-label">冰箱管理</span>
+        </div>
+        <div class="quick-card" data-page="all-dishes">
+          <span class="quick-icon">📖</span>
+          <span class="quick-label">全部菜品</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 页面：今日菜单 ========== -->
+    <div id="page-menu" class="page page-hidden">
+      <header class="top-bar">
+        <button class="top-bar-btn back-btn" data-back="home">←</button>
+        <h1 class="top-bar-title">今日菜单</h1>
+        <div class="top-bar-btn-placeholder"></div>
+      </header>
+
+      <!-- 日期选择器 -->
+      <div class="date-picker" id="date-picker">
+        <button class="date-arrow" id="date-prev">◀</button>
+        <span class="date-display" id="date-display"></span>
+        <button class="date-arrow" id="date-next">▶</button>
+      </div>
+
+      <!-- 菜单列表 -->
+      <div class="menu-list" id="menu-list">
+        <!-- 动态填充 -->
+      </div>
+
+      <!-- 缺省状态 -->
+      <div class="empty-state" id="menu-empty">
+        <div class="empty-illustration"><img src="img/empty/menu-empty.png" alt="空菜单"></div>
+        <p class="empty-text">今天还没点菜哦~</p>
+        <button class="btn-primary" data-page="all-dishes">去选菜</button>
+      </div>
+    </div>
+
+    <!-- ========== 页面：全部菜品 ========== -->
+    <div id="page-all-dishes" class="page page-hidden">
+      <header class="top-bar">
+        <button class="top-bar-btn back-btn" data-back="home">← 返回</button>
+        <h1 class="top-bar-title">菜品列表</h1>
+        <div class="top-bar-btn-placeholder"></div>
+      </header>
+
+      <!-- 分类标签（水平滚动） -->
+      <div class="category-scroll" id="category-scroll">
+        <button class="category-tag-sm active" data-category="全部">全部</button>
+        <button class="category-tag-sm" data-category="荤菜">荤菜</button>
+        <button class="category-tag-sm" data-category="素菜">素菜</button>
+        <button class="category-tag-sm" data-category="汤品">汤品</button>
+        <button class="category-tag-sm" data-category="主食">主食</button>
+      </div>
+
+      <!-- 菜品网格 -->
+      <div class="dish-grid" id="dish-grid">
+        <!-- 动态填充 -->
+      </div>
+
+      <!-- 悬浮添加按钮 -->
+      <button class="fab" id="fab-add-dish">+</button>
+    </div>
+
+    <!-- ========== 页面：冰箱管理 ========== -->
+    <div id="page-fridge" class="page page-hidden">
+      <header class="top-bar">
+        <button class="top-bar-btn back-btn" data-back="home">←</button>
+        <h1 class="top-bar-title">冰箱管理</h1>
+        <div class="top-bar-btn-placeholder"></div>
+      </header>
+
+      <!-- 添加食材表单 -->
+      <div class="fridge-form" id="fridge-form">
+        <input type="text" class="input-full" id="fridge-name" placeholder="食材名称（如：鸡蛋）">
+        <div class="fridge-dates">
+          <div class="date-field">
+            <label>购买日期</label>
+            <input type="date" class="input-full" id="fridge-purchase-date">
+          </div>
+          <div class="date-field">
+            <label>保质期至</label>
+            <input type="date" class="input-full" id="fridge-expiry-date">
+          </div>
+        </div>
+        <button class="btn-primary btn-full" id="btn-add-fridge">添加</button>
+      </div>
+
+      <!-- 现有食材列表 -->
+      <h2 class="section-title">现有食材</h2>
+      <div class="fridge-list" id="fridge-list">
+        <!-- 动态填充 -->
+      </div>
+
+      <!-- 缺省状态 -->
+      <div class="empty-state" id="fridge-empty">
+        <div class="empty-illustration"><img src="img/empty/fridge-empty.png" alt="空冰箱"></div>
+        <p class="empty-text">冰箱还是空的哦~</p>
+      </div>
+    </div>
+
+    <!-- ========== 页面：我的 ========== -->
+    <div id="page-profile" class="page page-hidden">
+      <header class="top-bar">
+        <div class="top-bar-btn-placeholder"></div>
+        <h1 class="top-bar-title">我的</h1>
+        <div class="top-bar-btn-placeholder"></div>
+      </header>
+
+      <!-- 用户信息 -->
+      <div class="profile-header">
+        <div class="profile-avatar">🐱</div>
+        <div class="profile-nickname" id="profile-nickname">点击设置昵称</div>
+      </div>
+
+      <!-- 家庭组卡片 -->
+      <div class="family-card" id="family-card">
+        <!-- 已加入状态 -->
+        <div id="family-joined" class="family-joined" style="display:none;">
+          <h3 class="family-name" id="family-name"></h3>
+          <div class="family-member-count" id="family-member-count"></div>
+          <div class="family-members" id="family-members-list"></div>
+          <div class="family-share-code">
+            <span class="share-label">共享码</span>
+            <span class="share-code-value" id="share-code"></span>
+          </div>
+          <button class="btn-text-danger" id="btn-leave-family">退出家庭组</button>
+        </div>
+        <!-- 未加入状态 -->
+        <div id="family-not-joined" class="family-not-joined">
+          <p class="family-hint">加入家庭组，和家人一起点菜吧~</p>
+          <button class="btn-primary btn-full" id="btn-create-family">创建家庭组</button>
+          <div class="join-family">
+            <input type="text" class="input-full" id="join-code-input" placeholder="输入6位共享码" maxlength="6">
+            <button class="btn-secondary btn-full" id="btn-join-family">加入家庭组</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 设置区 -->
+      <div class="settings-section">
+        <div class="settings-item" id="btn-edit-nickname">
+          <span>✏️ 修改昵称</span>
+          <span>›</span>
+        </div>
+        <div class="settings-item" id="btn-clear-cache">
+          <span>🗑️ 清除缓存</span>
+          <span>›</span>
+        </div>
+        <div class="settings-item" id="btn-about">
+          <span>ℹ️ 关于</span>
+          <span>›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 底部导航栏 ========== -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-page="home">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">首页</span>
+      </button>
+      <button class="nav-item" data-page="menu">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">菜单</span>
+      </button>
+      <button class="nav-item" data-page="fridge">
+        <span class="nav-icon">🧊</span>
+        <span class="nav-label">冰箱</span>
+      </button>
+      <button class="nav-item" data-page="profile">
+        <span class="nav-icon">👤</span>
+        <span class="nav-label">我的</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  全局弹窗容器                                                  -->
+  <!-- ============================================================ -->
+
+  <!-- 菜品详情弹窗 -->
+  <div class="modal-overlay" id="modal-dish-detail">
+    <div class="modal-content modal-dish">
+      <button class="modal-close" id="modal-dish-close">✕</button>
+      <div class="modal-dish-image" id="modal-dish-image">🍽️</div>
+      <h2 class="modal-dish-name" id="modal-dish-name"></h2>
+      <span class="modal-dish-category" id="modal-dish-category"></span>
+
+      <!-- 外部链接区域 -->
+      <div class="modal-dish-link-section" id="modal-dish-link-section">
+        <!-- 有链接时显示 -->
+        <div class="modal-dish-link-view" id="modal-dish-link-view" style="display:none;">
+          <a href="#" target="_blank" id="modal-dish-link">📎 查看菜谱链接</a>
+          <button class="btn-text-sm" id="btn-edit-link">✏️ 修改链接</button>
+        </div>
+        <!-- 无链接 / 编辑链接 -->
+        <div class="modal-dish-link-edit" id="modal-dish-link-edit">
+          <div style="display:flex;gap:8px;">
+            <input type="url" class="input-full" id="modal-dish-link-input"
+                   placeholder="粘贴外部链接（菜谱视频等）" style="flex:1;">
+            <button class="btn-primary" id="btn-save-link" style="height:48px;white-space:nowrap;">保存链接</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary btn-full" id="btn-add-to-menu">📋 加入今日菜单</button>
+    </div>
+  </div>
+
+  <!-- 添加菜品弹窗 -->
+  <div class="modal-overlay" id="modal-add-dish">
+    <div class="modal-content modal-form">
+      <button class="modal-close" id="modal-add-close">✕</button>
+      <h2 class="modal-title">添加新菜品</h2>
+      <input type="text" class="input-full" id="add-dish-name" placeholder="菜品名称">
+      <div class="form-categories" id="add-dish-categories">
+        <button class="category-tag active" data-category="荤菜">荤菜</button>
+        <button class="category-tag" data-category="素菜">素菜</button>
+        <button class="category-tag" data-category="汤品">汤品</button>
+        <button class="category-tag" data-category="主食">主食</button>
+      </div>
+      <input type="url" class="input-full" id="add-dish-link" placeholder="外部链接（可选，如菜谱视频链接）">
+      <button class="btn-primary btn-full" id="btn-save-dish">保存菜品</button>
+    </div>
+  </div>
+
+  <!-- Toast 提示 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ============================================================ -->
+  <!--  脚本                                                        -->
+  <!-- ============================================================ -->
+  <script src="js/utils.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data/preset-dishes.js"></script>
+  <script src="js/data/illustrations.js"></script>
+  <script src="js/pages/home.js"></script>
+  <script src="js/pages/menu.js"></script>
+  <script src="js/pages/all-dishes.js"></script>
+  <script src="js/pages/dish-detail.js"></script>
+  <script src="js/pages/fridge.js"></script>
+  <script src="js/pages/profile.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker 注册 -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>生成 PWA 图标</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 650px; margin: 0 auto; background: #FFF8E7; }
+    h1 { color: #F28C71; }
+    .preview { text-align: center; margin: 20px 0; }
+    .preview img { border: 3px solid #F28C71; border-radius: 24px; box-shadow: 0 4px 12px rgba(242,140,113,0.3); }
+    .sizes { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; justify-content: center; }
+    .size-box { text-align: center; background: white; padding: 12px; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .size-box img { border: 2px solid #F0E8D8; border-radius: 12px; display: block; margin: 0 auto; }
+    .size-box span { display: block; font-size: 12px; color: #8D7B6F; margin-top: 6px; }
+    button { background: #F28C71; color: white; border: none; padding: 14px 28px; border-radius: 24px; font-size: 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(242,140,113,0.35); margin: 5px; }
+    button:hover { background: #E07B5F; }
+    button:active { transform: scale(0.96); }
+    .note { color: #8D7B6F; font-size: 14px; margin-top: 20px; background: white; padding: 16px; border-radius: 16px; }
+    .note code { background: #FFF0C8; padding: 2px 6px; border-radius: 4px; }
+    .status { text-align: center; padding: 20px; color: #F28C71; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>🐱 PWA 图标生成器</h1>
+
+  <div class="preview">
+    <img id="preview" width="128" height="128" alt="猫咪图标预览">
+    <p>图标预览（128×128）</p>
+  </div>
+
+  <p style="text-align:center;color:#8D7B6F;">点击下方图标逐个保存，或点击按钮一键下载全部</p>
+
+  <div class="sizes" id="sizes"></div>
+
+  <div style="text-align:center; margin:20px 0;">
+    <button onclick="downloadAll()">📥 一键下载全部图标（ZIP提示）</button>
+  </div>
+
+  <div class="note">
+    <p><b>📌 保存位置：</b></p>
+    <p>将所有 PNG 图标保存到：<code>C:\Users\admin\cute-menu\assets\icons\</code></p>
+    <p>文件名：icon-72.png / icon-96.png / icon-128.png / icon-144.png / icon-152.png / icon-192.png / icon-384.png / icon-512.png</p>
+  </div>
+
+  <script>
+    // 内嵌 SVG（避免 file:// 协议下的 fetch 限制）
+    const SVG_TEXT = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><circle cx="256" cy="256" r="250" fill="#FFF8E7" stroke="#F28C71" stroke-width="8"/><ellipse cx="256" cy="280" rx="130" ry="110" fill="#F28C71"/><polygon points="140,190 120,80 200,150" fill="#F28C71"/><polygon points="148,178 135,100 190,155" fill="#FFB8A8"/><polygon points="372,190 392,80 312,150" fill="#F28C71"/><polygon points="364,178 377,100 322,155" fill="#FFB8A8"/><ellipse cx="210" cy="260" rx="22" ry="24" fill="#FFF"/><ellipse cx="212" cy="262" rx="12" ry="14" fill="#4A3728"/><circle cx="218" cy="255" r="5" fill="#FFF"/><ellipse cx="302" cy="260" rx="22" ry="24" fill="#FFF"/><ellipse cx="304" cy="262" rx="12" ry="14" fill="#4A3728"/><circle cx="310" cy="255" r="5" fill="#FFF"/><ellipse cx="256" cy="295" rx="10" ry="7" fill="#FFB8A8"/><path d="M240,305 Q256,322 272,305" fill="none" stroke="#4A3728" stroke-width="3" stroke-linecap="round"/><line x1="256" y1="302" x2="256" y2="312" stroke="#4A3728" stroke-width="3" stroke-linecap="round"/><line x1="130" y1="275" x2="195" y2="285" stroke="#4A3728" stroke-width="2.5" stroke-linecap="round"/><line x1="130" y1="295" x2="195" y2="295" stroke="#4A3728" stroke-width="2.5" stroke-linecap="round"/><line x1="382" y1="275" x2="317" y2="285" stroke="#4A3728" stroke-width="2.5" stroke-linecap="round"/><line x1="382" y1="295" x2="317" y2="295" stroke="#4A3728" stroke-width="2.5" stroke-linecap="round"/><circle cx="370" cy="390" r="16" fill="#F28C71" opacity="0.6"/><circle cx="355" cy="375" r="8" fill="#F28C71" opacity="0.6"/><circle cx="385" cy="375" r="8" fill="#F28C71" opacity="0.6"/><circle cx="355" cy="405" r="8" fill="#F28C71" opacity="0.6"/><circle cx="385" cy="405" r="8" fill="#F28C71" opacity="0.6"/><circle cx="140" cy="400" r="10" fill="#F28C71" opacity="0.4"/><circle cx="130" cy="390" r="5" fill="#F28C71" opacity="0.4"/><circle cx="150" cy="390" r="5" fill="#F28C71" opacity="0.4"/><circle cx="130" cy="410" r="5" fill="#F28C71" opacity="0.4"/><circle cx="150" cy="410" r="5" fill="#F28C71" opacity="0.4"/></svg>';
+
+    const SIZES = [72, 96, 128, 144, 152, 192, 384, 512];
+    const iconDataUrls = {};
+
+    async function generate() {
+      const svgBlob = new Blob([SVG_TEXT], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(svgBlob);
+      const container = document.getElementById('sizes');
+
+      const img = new Image();
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = url;
+      });
+
+      for (const size of SIZES) {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, size, size);
+        const dataUrl = canvas.toDataURL('image/png');
+        iconDataUrls[size] = dataUrl;
+
+        const box = document.createElement('div');
+        box.className = 'size-box';
+        const displaySize = size <= 128 ? size : Math.round(size / 3);
+        box.innerHTML = `
+          <a href="${dataUrl}" download="icon-${size}.png" title="点击保存 icon-${size}.png">
+            <img src="${dataUrl}" width="${displaySize}" height="${displaySize}">
+          </a>
+          <span>${size}×${size}</span>
+        `;
+        container.appendChild(box);
+
+        if (size === 128) {
+          document.getElementById('preview').src = dataUrl;
+        }
+      }
+
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadAll() {
+      let count = 0;
+      for (const size of SIZES) {
+        const a = document.createElement('a');
+        a.href = iconDataUrls[size];
+        a.download = `icon-${size}.png`;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        setTimeout(() => {
+          a.click();
+          document.body.removeChild(a);
+          count++;
+        }, count * 300);
+      }
+    }
+
+    generate().catch(err => {
+      document.getElementById('sizes').innerHTML =
+        '<p style="color:red;text-align:center;">生成失败：' + err.message + '</p>';
+    });
+  </script>
+</body>
+</html>

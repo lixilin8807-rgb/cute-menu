@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="24" fill="#FFF1ED"/>
+  <circle cx="100" cy="90" r="50" fill="#E2D1F9" opacity="0.4"/>
+  <text x="100" y="165" text-anchor="middle" font-size="64">🍲</text>
+</svg>

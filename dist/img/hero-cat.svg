@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- 身体 -->
+  <ellipse cx="60" cy="82" rx="32" ry="26" fill="#F28C71"/>
+  <!-- 头 -->
+  <circle cx="60" cy="48" r="24" fill="#F28C71"/>
+  <!-- 左耳 -->
+  <polygon points="38,36 28,10 48,28" fill="#F28C71"/>
+  <polygon points="40,34 34,18 47,30" fill="#FFB8A8"/>
+  <!-- 右耳 -->
+  <polygon points="82,36 92,10 72,28" fill="#F28C71"/>
+  <polygon points="80,34 86,18 73,30" fill="#FFB8A8"/>
+  <!-- 眼睛 -->
+  <ellipse cx="51" cy="46" rx="5" ry="5.5" fill="#984630"/>
+  <ellipse cx="69" cy="46" rx="5" ry="5.5" fill="#984630"/>
+  <!-- 瞳孔高光 -->
+  <circle cx="53" cy="44" r="2" fill="white"/>
+  <circle cx="71" cy="44" r="2" fill="white"/>
+  <!-- 鼻子 -->
+  <ellipse cx="60" cy="53" rx="3" ry="2" fill="#984630"/>
+  <!-- 嘴巴 -->
+  <path d="M57 55 Q60 58 60 55" stroke="#984630" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M63 55 Q60 58 60 55" stroke="#984630" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <!-- 胡须 -->
+  <line x1="30" y1="50" x2="45" y2="52" stroke="#984630" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+  <line x1="30" y1="55" x2="45" y2="54" stroke="#984630" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+  <line x1="90" y1="50" x2="75" y2="52" stroke="#984630" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+  <line x1="90" y1="55" x2="75" y2="54" stroke="#984630" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+  <!-- 前爪 -->
+  <ellipse cx="48" cy="72" rx="10" ry="6" fill="#FFB8A8"/>
+  <ellipse cx="72" cy="72" rx="10" ry="6" fill="#FFB8A8"/>
+  <!-- 尾巴 -->
+  <path d="M88 80 Q105 70 100 55 Q98 50 95 52" stroke="#F28C71" stroke-width="7" stroke-linecap="round" fill="none"/>
+</svg>
