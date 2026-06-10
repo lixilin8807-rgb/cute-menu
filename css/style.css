@@ -224,7 +224,7 @@ img {
   min-height: 100dvh;
 }
 
-.page-hidden {
+#app .page-hidden {
   display: none !important;
 }
 
@@ -248,8 +248,8 @@ img {
 }
 
 .top-bar-btn {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   font-size: 18px;
   display: flex;
   align-items: center;
@@ -259,7 +259,7 @@ img {
 }
 
 .top-bar-btn-placeholder {
-  width: 36px;
+  width: 44px;
 }
 
 .top-bar-avatar {
@@ -544,8 +544,8 @@ img {
 }
 
 .category-tag {
-  height: 36px;
-  padding: 0 var(--sp-3);
+  height: 40px;
+  padding: 0 var(--sp-4);
   border-radius: var(--radius-full);
   font-size: var(--fs-caption);
   font-weight: var(--fw-bold);
@@ -574,7 +574,7 @@ img {
 }
 
 .category-tag-sm {
-  height: 32px;
+  height: 36px;
   padding: 0 var(--sp-4);
   border-radius: var(--radius-full);
   font-size: var(--fs-caption);
@@ -748,12 +748,12 @@ img {
 }
 
 .date-arrow {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--color-text-secondary);
   border-radius: var(--radius-full);
 }
@@ -1713,7 +1713,7 @@ input.input-full[type="date"] {
 .mb-sm { margin-bottom: var(--sp-2); }
 .mb-md { margin-bottom: var(--sp-3); }
 .mb-lg { margin-bottom: var(--sp-4); }
-.hidden { display: none !important; }
+#app .hidden { display: none !important; }
 
 /* 仅屏幕阅读器可见 */
 .sr-only {
@@ -1737,5 +1737,49 @@ input.input-full[type="date"] {
   }
   .bottom-nav {
     width: calc(480px - 32px);
+  }
+}
+
+/* --------------------------------------------------------
+   横屏适配
+   -------------------------------------------------------- */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  #page-home {
+    padding-top: var(--sp-2);
+  }
+
+  .hero-section {
+    padding-top: 40px;
+    margin-bottom: var(--sp-2);
+  }
+
+  .hero-cat img {
+    height: 80px;
+  }
+
+  .btn-hero {
+    height: 56px;
+    font-size: var(--fs-h2);
+  }
+
+  .recommend-card {
+    padding: var(--sp-3);
+  }
+
+  .recommend-image {
+    height: 100px;
+  }
+
+  .quick-entries {
+    gap: var(--sp-2);
+  }
+
+  .dish-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-2);
+  }
+
+  .home-tagline {
+    display: none;
   }
 }

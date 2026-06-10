@@ -3,10 +3,13 @@
   "short_name": "趣味点菜",
   "description": "家庭趣味点菜小程序 - 今天吃什么？",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#FFF8F6",
   "background_color": "#FFF8F6",
+  "categories": ["food", "lifestyle"],
+  "lang": "zh-CN",
   "icons": [
     {
       "src": "assets/icons/icon-72.png",
