@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend Design Skill Demo — 菜品 Spotlight</title>
+
+  <!-- 独特字体组合：Noto Serif SC（展示）+ Plus Jakarta Sans（正文）-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       Frontend Design Skill 演示 — 设计令牌
+       理念：温暖的编辑/杂志风格，不对称构图，纹理背景
+       ============================================================ */
+
+    :root {
+      /* 更丰富的暖色调色板 */
+      --color-ember: #8B3A1F;        /* 深红棕 — 主色 */
+      --color-terracotta: #C76B4A;   /* 赤陶 — 强调 */
+      --color-peach: #F5C1A8;        /* 蜜桃 — 高亮 */
+      --color-cream: #FEF5F0;        /* 奶油 — 背景亮部 */
+      --color-warm-bg: #F9E8DD;      /* 暖粉底 */
+      --color-cocoa: #2C1510;        /* 深可可 — 文字 */
+      --color-olive: #5C7A6A;        /* 橄榄绿 — 辅助 */
+      --color-gold: #D4A354;         /* 金 — 点缀 */
+      --color-blush: #F0C8BC;        /* 腮红粉 */
+      --color-charcoal: #1E1B1A;     /* 炭灰 — 深色文字 */
+
+      /* 间距：保持 8px 网格 */
+      --sp-1: 4px;
+      --sp-2: 8px;
+      --sp-3: 12px;
+      --sp-4: 16px;
+      --sp-5: 20px;
+      --sp-6: 24px;
+      --sp-8: 32px;
+      --sp-10: 40px;
+      --sp-12: 48px;
+      --sp-16: 64px;
+
+      /* 圆角 */
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --radius-xl: 40px;
+      --radius-full: 9999px;
+    }
+
+    /* ===== 全局重置 ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--color-warm-bg);
+      color: var(--color-cocoa);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-4);
+      /* 背景纹理：微妙的噪点 */
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(199, 107, 74, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(212, 163, 84, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 0%, rgba(240, 168, 140, 0.1) 0%, transparent 40%);
+    }
+
+    /* ===== SVG 噪点纹理叠加层 ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== 主容器：不对称杂志布局 ===== */
+    .spotlight {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      background:
+        linear-gradient(135deg, var(--color-cream) 0%, #FFF9F6 30%, #FDF2EC 100%);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow:
+        0 2px 20px rgba(44, 21, 16, 0.06),
+        0 20px 60px rgba(139, 58, 31, 0.1),
+        0 0 0 1px rgba(255,255,255,0.6) inset;
+    }
+
+    /* ===== 顶部丝带装饰 ===== */
+    .spotlight-ribbon {
+      position: absolute;
+      top: 28px;
+      left: -8px;
+      background: var(--color-ember);
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 20px 6px 28px;
+      border-radius: 0 var(--radius-full) var(--radius-full) 0;
+      box-shadow: 2px 4px 12px rgba(139, 58, 31, 0.25);
+      z-index: 10;
+      animation: ribbonSlide 0.7s 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    @keyframes ribbonSlide {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* ===== 图片区域：不对称展示 ===== */
+    .spotlight-visual {
+      position: relative;
+      height: 240px;
+      background:
+        radial-gradient(ellipse at 60% 30%, rgba(245, 193, 168, 0.5) 0%, transparent 60%),
+        radial-gradient(ellipse at 30% 70%, rgba(139, 58, 31, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, #FEF9F5 0%, #F7E2D5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* 装饰性几何形状 */
+    .visual-geo {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.12;
+    }
+    .visual-geo--1 {
+      width: 180px;
+      height: 180px;
+      background: var(--color-terracotta);
+      top: -60px;
+      right: -40px;
+      animation: geoFloat 6s ease-in-out infinite;
+    }
+    .visual-geo--2 {
+      width: 120px;
+      height: 120px;
+      background: var(--color-gold);
+      bottom: -30px;
+      left: 10px;
+      animation: geoFloat 5s ease-in-out 1s infinite;
+    }
+    .visual-geo--3 {
+      width: 60px;
+      height: 60px;
+      background: var(--color-olive);
+      top: 40px;
+      left: 25px;
+      border-radius: 12px;
+      transform: rotate(15deg);
+      animation: geoFloat 7s ease-in-out 2s infinite;
+    }
+
+    @keyframes geoFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33% { transform: translateY(-8px) rotate(3deg); }
+      66% { transform: translateY(4px) rotate(-2deg); }
+    }
+
+    /* 主菜品 Emoji 展示 */
+    .spotlight-emoji {
+      position: relative;
+      z-index: 2;
+      font-size: 110px;
+      filter: drop-shadow(0 8px 24px rgba(139, 58, 31, 0.18));
+      animation: emojiReveal 0.8s 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      line-height: 1;
+    }
+
+    @keyframes emojiReveal {
+      from {
+        transform: scale(0.3) translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* 浮动装饰 emoji */
+    .floating-emoji {
+      position: absolute;
+      z-index: 3;
+      font-size: 24px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    .floating-emoji--1 {
+      top: 30px;
+      right: 60px;
+      animation: floatAround 4s ease-in-out 1s infinite;
+      font-size: 20px;
+    }
+    .floating-emoji--2 {
+      top: 100px;
+      right: 30px;
+      animation: floatAround 5s ease-in-out 0.5s infinite;
+      font-size: 28px;
+    }
+    .floating-emoji--3 {
+      bottom: 40px;
+      left: 50px;
+      animation: floatAround 3.5s ease-in-out 1.5s infinite;
+      font-size: 18px;
+    }
+    .floating-emoji--4 {
+      top: 50px;
+      left: 60px;
+      animation: floatAround 4.5s ease-in-out 2s infinite;
+      font-size: 22px;
+    }
+
+    @keyframes floatAround {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      25% { transform: translateY(-12px) rotate(5deg) scale(1.1); }
+      50% { transform: translateY(-4px) rotate(-3deg) scale(0.95); }
+      75% { transform: translateY(-16px) rotate(2deg) scale(1.05); }
+    }
+
+    /* ===== 内容区：不对称排版 ===== */
+    .spotlight-body {
+      padding: 28px 28px 32px;
+      position: relative;
+    }
+
+    /* 内容区左侧的装饰竖线 */
+    .spotlight-body::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 20px;
+      bottom: 20px;
+      width: 4px;
+      background: linear-gradient(180deg,
+        var(--color-terracotta) 0%,
+        var(--color-peach) 50%,
+        var(--color-gold) 100%);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      animation: lineGrow 0.6s 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      transform-origin: top;
+    }
+
+    @keyframes lineGrow {
+      from { transform: scaleY(0); }
+      to { transform: scaleY(1); }
+    }
+
+    /* 分类标签 */
+    .dish-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(199, 107, 74, 0.1);
+      color: var(--color-terracotta);
+      margin-bottom: 16px;
+      animation: fadeUp 0.5s 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    /* 菜名：大号衬线字体 */
+    .dish-name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--color-charcoal);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+      animation: fadeUp 0.5s 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    /* 英文副标题 */
+    .dish-subtitle {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-olive);
+      margin-bottom: 20px;
+      opacity: 0.7;
+      animation: fadeUp 0.5s 1.0s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    /* 描述文字 */
+    .dish-description {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(44, 21, 16, 0.7);
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        transform: translateY(16px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* ===== 数据指标行 ===== */
+    .dish-stats {
+      display: flex;
+      gap: 28px;
+      margin-bottom: 24px;
+      padding: 16px 20px;
+      background: rgba(240, 200, 188, 0.2);
+      border-radius: var(--radius-md);
+      animation: fadeUp 0.5s 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat-value {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-ember);
+    }
+    .stat-label {
+      font-size: 11px;
+      color: rgba(44, 21, 16, 0.5);
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== 按钮组 ===== */
+    .dish-actions {
+      display: flex;
+      gap: 12px;
+      animation: fadeUp 0.5s 1.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    .btn-primary-action {
+      flex: 1;
+      padding: 16px 24px;
+      border: none;
+      border-radius: var(--radius-full);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #FFF;
+      background: linear-gradient(135deg, var(--color-ember) 0%, #A04528 100%);
+      box-shadow:
+        0 4px 20px rgba(139, 58, 31, 0.3),
+        0 1px 3px rgba(139, 58, 31, 0.2);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary-action::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .btn-primary-action:hover::after {
+      opacity: 1;
+    }
+    .btn-primary-action:active {
+      transform: scale(0.96);
+      box-shadow:
+        0 2px 8px rgba(139, 58, 31, 0.2);
+    }
+
+    .btn-secondary-action {
+      width: 52px;
+      height: 52px;
+      border: none;
+      border-radius: 50%;
+      background: #FFF;
+      color: var(--color-ember);
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow:
+        0 2px 12px rgba(44, 21, 16, 0.06),
+        0 0 0 1px rgba(139, 58, 31, 0.08);
+      transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-secondary-action:hover {
+      transform: rotate(180deg);
+      box-shadow:
+        0 4px 20px rgba(44, 21, 16, 0.12),
+        0 0 0 1px rgba(139, 58, 31, 0.15);
+    }
+
+    /* ===== 底部趣味提示 ===== */
+    .spotlight-footer {
+      font-size: 11px;
+      text-align: center;
+      color: rgba(44, 21, 16, 0.35);
+      padding: 20px;
+      border-top: 1px solid rgba(139, 58, 31, 0.06);
+      letter-spacing: 0.04em;
+      animation: fadeUp 0.5s 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    /* ============================================================
+       对比区：原版样式预览
+       ============================================================ */
+    .comparison-section {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      margin-top: 32px;
+    }
+
+    .comparison-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+      color: var(--color-charcoal);
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .comparison-card {
+      background: #FFF;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .comparison-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      display: inline-block;
+    }
+    .comparison-label--skill {
+      background: rgba(139, 58, 31, 0.1);
+      color: var(--color-ember);
+    }
+    .comparison-label--old {
+      background: rgba(0,0,0,0.05);
+      color: rgba(0,0,0,0.5);
+    }
+
+    .comparison-emoji {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+    .comparison-dish-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .comparison-dish-cat {
+      font-size: 11px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       Frontend Design Skill 演示 — 菜品 Spotlight
+       设计方向：温暖的编辑/杂志风格 + 不对称构图
+       字体：Noto Serif SC（展示）+ Plus Jakarta Sans（正文）
+       特点：噪点纹理、浮动装饰、交错入场动画、渐变背景
+       ============================================================ -->
+  <main class="spotlight">
+    <!-- 顶部丝带标签 -->
+    <div class="spotlight-ribbon">🔥 今日推荐</div>
+
+    <!-- 菜品视觉区 -->
+    <div class="spotlight-visual">
+      <div class="visual-geo visual-geo--1"></div>
+      <div class="visual-geo visual-geo--2"></div>
+      <div class="visual-geo visual-geo--3"></div>
+      <span class="spotlight-emoji">🍳</span>
+      <span class="floating-emoji floating-emoji--1">🥚</span>
+      <span class="floating-emoji floating-emoji--2">🧅</span>
+      <span class="floating-emoji floating-emoji--3">🥕</span>
+      <span class="floating-emoji floating-emoji--4">✨</span>
+    </div>
+
+    <!-- 内容区 -->
+    <div class="spotlight-body">
+      <span class="dish-tag">🍖 荤菜</span>
+      <h2 class="dish-name">红烧排骨</h2>
+      <p class="dish-subtitle">Braised Spare Ribs · Signature Dish</p>
+      <p class="dish-description">
+        慢火细炖两小时，酱香浓郁，骨肉分离。每一口都是家的味道，配上一碗白米饭，绝了。
+      </p>
+
+      <!-- 趣味数据 -->
+      <div class="dish-stats">
+        <div class="stat-item">
+          <span class="stat-value">🏆</span>
+          <span class="stat-label">本月最受欢迎</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">12次</span>
+          <span class="stat-label">本月点单</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">⭐4.9</span>
+          <span class="stat-label">家人评分</span>
+        </div>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="dish-actions">
+        <button class="btn-primary-action" onclick="this.textContent='已加入！✅'; setTimeout(()=>this.textContent='就它了！🍽️', 1500)">
+          就它了！🍽️
+        </button>
+        <button class="btn-secondary-action" onclick="this.style.transform='rotate(360deg)'; setTimeout(()=>this.style.transform='', 600)">
+          🔄
+        </button>
+      </div>
+    </div>
+
+    <footer class="spotlight-footer">
+      🐱 猫咪主厨用心推荐 · 每天都有一道好菜
+    </footer>
+  </main>
+
+  <!-- ============================================================
+       对比区：新旧设计并排
+       ============================================================ -->
+  <section class="comparison-section">
+    <h3 class="comparison-title">📐 设计对比</h3>
+    <div class="comparison-grid">
+      <!-- Skill 版的关键特征 -->
+      <div class="comparison-card">
+        <span class="comparison-label comparison-label--skill">✦ Skill 版本</span>
+        <div class="comparison-emoji" style="font-size:14px;line-height:1.6;text-align:left;">
+          🎨 暖色渐变 + 噪点纹理<br>
+          🔤 衬线标题 + 无衬线正文<br>
+          📐 不对称布局 + 装饰几何<br>
+          ✨ 交错入场动画<br>
+          🫧 浮动装饰元素<br>
+          📊 趣味数据指标
+        </div>
+      </div>
+
+      <!-- 旧版的特征 -->
+      <div class="comparison-card">
+        <span class="comparison-label comparison-label--old">原版设计</span>
+        <div class="comparison-emoji" style="font-size:14px;line-height:1.6;text-align:left;color:rgba(0,0,0,0.5);">
+          🎨 纯色背景<br>
+          🔤 单一字体<br>
+          📐 居中对称布局<br>
+          ⚪ Neumorphism 阴影<br>
+          📇 基础卡片结构<br>
+          🔘 简单按钮
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
