@@ -30,44 +30,94 @@
       <!-- 顶部标语 -->
       <div class="home-tagline">人是铁，饭是钢，一顿不吃饿得慌~喵🐱</div>
 
-      <!-- 主行动区：今天吃什么 -->
-      <section class="hero-section">
-        <div class="hero-cat">
+      <!-- 模式切换按钮 -->
+      <div class="mode-toggle" id="mode-toggle">
+        <button class="mode-btn active" data-mode="random">
+          <span class="mode-btn-icon">🎲</span>
+          <span class="mode-btn-text">给我灵感</span>
+        </button>
+        <button class="mode-btn" data-mode="search">
+          <span class="mode-btn-icon">🔍</span>
+          <span class="mode-btn-text">直接点菜</span>
+        </button>
+      </div>
+
+      <!-- ===== 功能一：给我灵感 ===== -->
+      <section class="home-section" id="section-random">
+        <!-- 猫咪图 + 随机推荐按钮 -->
+        <div class="hero-cat hero-cat-compact">
           <img src="img/xiaomao.png" alt="小猫咪" width="467" height="263">
         </div>
         <button class="btn-hero" id="btn-what-to-eat">
-          <span class="btn-hero-text">今天吃什么</span>
+          <span class="btn-hero-text">随机推荐</span>
           <span class="btn-hero-paw"><img src="img/maozhua.png" alt="猫爪" width="70" height="68"></span>
         </button>
+
+        <!-- 分类筛选标签（仅影响功能一） -->
+        <div class="category-tabs" id="category-tabs">
+          <button class="category-tag active" data-category="全部">全部</button>
+          <button class="category-tag" data-category="荤菜">荤菜</button>
+          <button class="category-tag" data-category="素菜">素菜</button>
+          <button class="category-tag" data-category="汤品">汤品</button>
+          <button class="category-tag" data-category="主食">主食</button>
+        </div>
+
+        <!-- 猫咪推荐卡片 -->
+        <div class="recommend-card" id="recommend-card">
+          <div class="recommend-badge">🐱 猫咪推荐</div>
+          <div class="recommend-image" id="recommend-image">🍽️</div>
+          <h3 class="recommend-name" id="recommend-name">蛋炒饭</h3>
+          <span class="recommend-category tag-staple" id="recommend-category">主食</span>
+          <div class="recommend-actions">
+            <button class="btn-refresh" id="btn-refresh">🔄 换一个</button>
+            <button class="btn-confirm" id="btn-confirm">就它了！</button>
+          </div>
+        </div>
       </section>
 
-      <!-- 搜索区 -->
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <label for="search-input" class="sr-only">搜索菜名</label>
-        <input type="text" class="search-input" id="search-input" placeholder="搜索菜名...">
-      </div>
-
-      <!-- 分类标签 -->
-      <div class="category-tabs" id="category-tabs">
-        <button class="category-tag active" data-category="全部">全部</button>
-        <button class="category-tag" data-category="荤菜">荤菜</button>
-        <button class="category-tag" data-category="素菜">素菜</button>
-        <button class="category-tag" data-category="汤品">汤品</button>
-        <button class="category-tag" data-category="主食">主食</button>
-      </div>
-
-      <!-- 猫咪推荐卡片 -->
-      <div class="recommend-card" id="recommend-card">
-        <div class="recommend-badge">🐱 猫咪推荐</div>
-        <div class="recommend-image" id="recommend-image">🍽️</div>
-        <h3 class="recommend-name" id="recommend-name">蛋炒饭</h3>
-        <span class="recommend-category tag-staple" id="recommend-category">主食</span>
-        <div class="recommend-actions">
-          <button class="btn-refresh" id="btn-refresh">🔄 换一个</button>
-          <button class="btn-confirm" id="btn-confirm">就它了！</button>
+      <!-- ===== 功能二：直接点菜 ===== -->
+      <section class="home-section" id="section-search" style="display:none;">
+        <!-- 独立搜索框 -->
+        <div class="search-box" id="search-box-2">
+          <span class="search-icon">🔍</span>
+          <label for="search-input-2" class="sr-only">输入菜名搜索</label>
+          <input type="text" class="search-input" id="search-input-2" placeholder="输入菜名...">
         </div>
-      </div>
+
+        <!-- 分类导航 -->
+        <div class="category-scroll" id="search-category-scroll">
+          <button class="category-tag-sm active" data-category="全部">全部</button>
+          <button class="category-tag-sm" data-category="荤菜">荤菜</button>
+          <button class="category-tag-sm" data-category="素菜">素菜</button>
+          <button class="category-tag-sm" data-category="汤品">汤品</button>
+          <button class="category-tag-sm" data-category="主食">主食</button>
+        </div>
+
+        <!-- 菜品网格 -->
+        <div class="dish-grid" id="search-dish-grid">
+          <!-- 动态渲染 -->
+        </div>
+
+        <!-- 最近点过的菜 -->
+        <div class="recent-section" id="recent-section" style="display:none;">
+          <p class="recent-label">⏰ 最近点过的菜</p>
+          <div class="recent-chips" id="recent-chips">
+            <!-- 动态渲染 -->
+          </div>
+        </div>
+
+        <!-- 搜索结果列表 -->
+        <div class="search-results" id="search-results" style="display:none;">
+          <!-- 动态渲染 -->
+        </div>
+
+        <!-- 无结果：添加新菜品 -->
+        <div class="search-no-result" id="search-no-result" style="display:none;">
+          <div class="no-result-emoji">🍳</div>
+          <p class="no-result-text">没有找到「<span id="no-result-name"></span>」</p>
+          <button class="btn-primary" id="btn-add-new-dish">➕ 添加新菜品</button>
+        </div>
+      </section>
 
       <!-- 快捷入口 -->
       <div class="quick-entries">
